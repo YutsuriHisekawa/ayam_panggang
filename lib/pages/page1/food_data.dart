@@ -1,4 +1,5 @@
 class MenuData {
+  final int id;
   final String image;
   final String title;
   final String description;
@@ -7,6 +8,7 @@ class MenuData {
   final double rating;
 
   MenuData({
+    required this.id,
     required this.image,
     required this.title,
     required this.description,
@@ -19,6 +21,7 @@ class MenuData {
 List<MenuData> getFoodItems() {
   return [
     MenuData(
+      id: 1, // Assign a unique ID
       image:
           'https://img.kurio.network/KHnU40LdXpEdIlK9e64yu9Hf8KQ=/1200x1200/filters:quality(80)/https://kurio-img.kurioapps.com/22/01/09/dd41c0fe-ff1c-498d-b35f-ec959150e7e1.jpe',
       title: 'Ayam Panggang',
@@ -28,6 +31,7 @@ List<MenuData> getFoodItems() {
       rating: 4.5,
     ),
     MenuData(
+      id: 2,
       image:
           'https://www.masakapahariini.com/wp-content/uploads/2022/03/nasi-goreng-rempah-500x300.jpg',
       title: 'Nasi Goreng',
@@ -37,6 +41,7 @@ List<MenuData> getFoodItems() {
       rating: 4.7,
     ),
     MenuData(
+      id: 3,
       image:
           'https://www.masakapahariini.com/wp-content/uploads/2023/03/resep-sambal-tomat.jpg',
       title: 'Sambal',
@@ -46,6 +51,7 @@ List<MenuData> getFoodItems() {
       rating: 4.8,
     ),
     MenuData(
+      id: 4,
       image:
           'https://kurio-img.kurioapps.com/21/12/20/f712a185-de62-4365-a4a4-6d218b798158.jpe',
       title: 'Sayur Lodeh',
@@ -55,6 +61,7 @@ List<MenuData> getFoodItems() {
       rating: 4.6,
     ),
     MenuData(
+      id: 5,
       image:
           'https://d1vbn70lmn1nqe.cloudfront.net/prod/wp-content/uploads/2021/11/03020431/7.-Kalori-Kerupuk-Putih-dan-Bahayanya-Jika-Dikonsumsi-Berlebih.jpg',
       title: 'Kerupuk',
@@ -64,6 +71,7 @@ List<MenuData> getFoodItems() {
       rating: 4.9,
     ),
     MenuData(
+      id: 6,
       image:
           'https://d1bpj0tv6vfxyp.cloudfront.net/articles/3be14058-960e-4007-abc1-03e949ccd01b_article_image_url.webp',
       title: 'Tahu Tempe',
@@ -73,6 +81,7 @@ List<MenuData> getFoodItems() {
       rating: 4.7,
     ),
     MenuData(
+      id: 7,
       image:
           'https://asset.kompas.com/crops/J7KOPBoSnx10zYpoFaid0E5_c-0=/2x0:700x465/750x500/data/photo/2023/11/07/654a25a73f416.jpg',
       title: 'Ayam Penyet',
@@ -82,6 +91,7 @@ List<MenuData> getFoodItems() {
       rating: 4.6,
     ),
     MenuData(
+      id: 8,
       image:
           'https://www.unileverfoodsolutions.co.id/dam/global-ufs/mcos/SEA/calcmenu/recipes/ID-recipes/salads/nasi-pecel/main-header.jpg',
       title: 'Pecel',

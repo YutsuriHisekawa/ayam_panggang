@@ -1,6 +1,6 @@
 # mbah_mo
 
-A new Flutter project.
+Project rumah makan ayam panggang mbah mo
 
 ## Getting Started
 

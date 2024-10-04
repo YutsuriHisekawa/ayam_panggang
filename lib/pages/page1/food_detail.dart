@@ -1,4 +1,3 @@
-// food_detail_page.dart
 import 'package:flutter/material.dart';
 import 'package:mbah_mo/pages/page1/food_data.dart';
 
@@ -9,6 +8,11 @@ class FoodDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+    final double padding = screenSize.width * 0.05;
+    final double titleFontSize = screenSize.width < 600 ? 24 : 30;
+    final double descriptionFontSize = screenSize.width < 600 ? 16 : 18;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -19,47 +23,125 @@ class FoodDetailPage extends StatelessWidget {
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Image.network(item.image,
-                width: double.infinity, fit: BoxFit.cover),
-            const SizedBox(height: 16),
-            Text(
-              item.title,
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 12),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _buildDetailRow(Icons.monetization_on, 'Rp ${item.price}'),
-                _buildDetailRow(Icons.timer, item.estimasi),
-                _buildDetailRow(Icons.star, item.rating.toString()),
-              ],
-            ),
-            const SizedBox(height: 12),
-            Text(
-              item.description,
-              style: const TextStyle(fontSize: 16),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 16),
-          ],
+        padding: EdgeInsets.all(padding),
+        child: screenSize.width < 600
+            ? _buildMobileLayout(titleFontSize, descriptionFontSize)
+            : _buildDesktopLayout(titleFontSize, descriptionFontSize),
+      ),
+    );
+  }
+
+  Widget _buildMobileLayout(double titleFontSize, double descriptionFontSize) {
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          _buildImage(),
+          const SizedBox(height: 16),
+          _buildTitle(titleFontSize),
+          const SizedBox(height: 12),
+          _buildDetailRow(),
+          const SizedBox(height: 12),
+          _buildDescription(descriptionFontSize),
+          const SizedBox(height: 20),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDesktopLayout(double titleFontSize, double descriptionFontSize) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          flex: 1,
+          child: _buildImage(),
+        ),
+        const SizedBox(width: 16),
+        Expanded(
+          flex: 2,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildTitle(titleFontSize),
+              const SizedBox(height: 12),
+              _buildDetailRow(),
+              const SizedBox(height: 12),
+              _buildDescription(descriptionFontSize),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildImage() {
+    return Container(
+      width: double.infinity,
+      height: 250,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black26,
+            blurRadius: 8,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: Image.network(
+          item.image,
+          fit: BoxFit.cover,
         ),
       ),
     );
   }
 
-  Widget _buildDetailRow(IconData icon, String text) {
+  Widget _buildTitle(double titleFontSize) {
+    return Text(
+      item.title,
+      style: TextStyle(
+        fontSize: titleFontSize,
+        fontWeight: FontWeight.bold,
+      ),
+      textAlign: TextAlign.start,
+    );
+  }
+
+  Widget _buildDetailRow() {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        _buildDetailIcon(Icons.monetization_on, 'Rp ${item.price}'),
+        const SizedBox(width: 16),
+        _buildDetailIcon(Icons.timer, item.estimasi),
+        const SizedBox(width: 16),
+        _buildDetailIcon(Icons.star, item.rating.toString()),
+      ],
+    );
+  }
+
+  Widget _buildDetailIcon(IconData icon, String text) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Icon(icon),
-        const SizedBox(width: 4),
+        const SizedBox(height: 4),
         Text(text),
       ],
+    );
+  }
+
+  Widget _buildDescription(double descriptionFontSize) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 8),
+      child: Text(
+        item.description,
+        style: TextStyle(fontSize: descriptionFontSize),
+        textAlign: TextAlign.start,
+      ),
     );
   }
 }

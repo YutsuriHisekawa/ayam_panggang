@@ -61,7 +61,8 @@ class FoodDetailPage extends StatelessWidget {
         Expanded(
           flex: 2,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment:
+                CrossAxisAlignment.center, // Center the text in desktop layout
             children: [
               _buildTitle(titleFontSize),
               const SizedBox(height: 12),
@@ -106,13 +107,13 @@ class FoodDetailPage extends StatelessWidget {
         fontSize: titleFontSize,
         fontWeight: FontWeight.bold,
       ),
-      textAlign: TextAlign.start,
+      textAlign: TextAlign.center, // Center the title text
     );
   }
 
   Widget _buildDetailRow() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      mainAxisAlignment: MainAxisAlignment.center, // Center the detail icons
       children: [
         _buildDetailIcon(Icons.monetization_on, 'Rp ${item.price}'),
         const SizedBox(width: 16),
@@ -129,7 +130,10 @@ class FoodDetailPage extends StatelessWidget {
       children: [
         Icon(icon),
         const SizedBox(height: 4),
-        Text(text),
+        Text(
+          text,
+          textAlign: TextAlign.center, // Center the detail icon text
+        ),
       ],
     );
   }
@@ -140,7 +144,7 @@ class FoodDetailPage extends StatelessWidget {
       child: Text(
         item.description,
         style: TextStyle(fontSize: descriptionFontSize),
-        textAlign: TextAlign.start,
+        textAlign: TextAlign.center, // Center the description text
       ),
     );
   }

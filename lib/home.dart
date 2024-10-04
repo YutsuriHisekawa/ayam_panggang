@@ -6,6 +6,7 @@ import 'pages/page2/page2.dart';
 import 'pages/page3/page3.dart';
 import 'pages/page4.dart';
 import 'component/botbar.dart';
+import 'component/drawer.dart';
 
 class Layarutama extends StatefulWidget {
   const Layarutama({super.key});
@@ -18,6 +19,8 @@ class _LayarutamaState extends State<Layarutama> {
   bool isLoggedIn = false;
   bool isGuest = false;
   int _halaman = 0;
+  String searchQuery = '';
+  bool isSearchBarVisible = false;
 
   @override
   void initState() {
@@ -37,14 +40,10 @@ class _LayarutamaState extends State<Layarutama> {
     }
   }
 
-  Future<void> _logout(BuildContext context) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove('isGuest');
-    await prefs.remove('isLoggedIn');
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const LoginPage()),
-    );
+  void _filterItems(String query) {
+    setState(() {
+      searchQuery = query;
+    });
   }
 
   @override
@@ -52,7 +51,7 @@ class _LayarutamaState extends State<Layarutama> {
     final isMobile = MediaQuery.of(context).size.width < 600;
 
     List<Widget> pages = [
-      const Page1(),
+      Page1(searchQuery: searchQuery),
       const Page2(),
       const Page3(),
       const Page4(),
@@ -72,44 +71,79 @@ class _LayarutamaState extends State<Layarutama> {
           style: const TextStyle(color: Colors.white),
         ),
         backgroundColor: const Color(0xFF6b1c1f),
+        iconTheme: const IconThemeData(color: Colors.white),
         actions: isMobile
-            ? []
-            : [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: TextButton(
-                    onPressed: () => setState(() => _halaman = 0),
-                    child: const Text('Home',
-                        style: TextStyle(color: Colors.white)),
+            ? [
+                IconButton(
+                  icon: Icon(
+                    isSearchBarVisible ? Icons.close : Icons.search,
+                    color: Colors.white,
                   ),
+                  onPressed: () {
+                    setState(() {
+                      isSearchBarVisible = !isSearchBarVisible;
+                    });
+                  },
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: TextButton(
-                    onPressed: () => setState(() => _halaman = 1),
-                    child: const Text('Notifikasi',
-                        style: TextStyle(color: Colors.white)),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: TextButton(
-                    onPressed: () => setState(() => _halaman = 2),
-                    child: const Text('Keranjang',
-                        style: TextStyle(color: Colors.white)),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: TextButton(
-                    onPressed: () => setState(() => _halaman = 3),
-                    child: const Text('Profil',
-                        style: TextStyle(color: Colors.white)),
-                  ),
-                ),
-              ],
+              ]
+            : [],
       ),
-      body: pages[_halaman],
+      body: Stack(
+        children: [
+          Column(
+            children: [
+              const SizedBox(height: 10),
+              Expanded(child: pages[_halaman]),
+            ],
+          ),
+          AnimatedOpacity(
+            opacity: isSearchBarVisible ? 1.0 : 0.0,
+            duration: const Duration(milliseconds: 300),
+            child: Visibility(
+              visible: isSearchBarVisible,
+              child: Positioned(
+                top: AppBar().preferredSize.height + 10,
+                left: 15,
+                right: 15,
+                child: Container(
+                  height: 50.0,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(30),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        spreadRadius: 2,
+                        blurRadius: 5,
+                        offset: const Offset(0, 3),
+                      ),
+                    ],
+                  ),
+                  child: TextField(
+                    onChanged: _filterItems,
+                    decoration: InputDecoration(
+                      hintText: 'Search...',
+                      border: InputBorder.none,
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 15),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+      endDrawer: !isMobile
+          ? CustomDrawer(
+              selectedIndex: _halaman,
+              onTap: (index) {
+                setState(() {
+                  _halaman = index;
+                });
+              },
+            )
+          : null,
       bottomNavigationBar: isMobile
           ? CustomBottomNavBar(
               selectedIndex: _halaman,

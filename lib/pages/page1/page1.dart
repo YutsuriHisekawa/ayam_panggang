@@ -3,14 +3,20 @@ import 'package:mbah_mo/pages/page1/food_data.dart';
 import 'package:mbah_mo/pages/page1/food_item.dart';
 
 class Page1 extends StatelessWidget {
-  const Page1({super.key});
+  final String searchQuery;
+
+  const Page1({super.key, required this.searchQuery});
 
   @override
   Widget build(BuildContext context) {
-    final items = getFoodItems();
+    List<MenuData> items = getFoodItems();
+    List<MenuData> filteredItems = items
+        .where((item) =>
+            item.title.toLowerCase().contains(searchQuery.toLowerCase()))
+        .toList();
+
     final screenWidth = MediaQuery.of(context).size.width;
 
-    // Adjust the crossAxisCount based on screen width
     int crossAxisCount;
     double childAspectRatio;
 
@@ -30,6 +36,7 @@ class Page1 extends StatelessWidget {
         padding: const EdgeInsets.all(15),
         child: Column(
           children: [
+            const SizedBox(height: 10), // Space between search bar and grid
             Expanded(
               child: GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -38,8 +45,9 @@ class Page1 extends StatelessWidget {
                   mainAxisSpacing: 16,
                   childAspectRatio: childAspectRatio,
                 ),
-                itemCount: items.length,
-                itemBuilder: (context, index) => FoodItem(item: items[index]),
+                itemCount: filteredItems.length,
+                itemBuilder: (context, index) =>
+                    FoodItem(item: filteredItems[index]),
               ),
             ),
           ],
